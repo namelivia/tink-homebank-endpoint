@@ -1,0 +1,8 @@
+tags
+refresh_token
+authorization_code
+*.egg-info
+__pycache__/
+.env
+output.csv
+categories.db
