@@ -15,6 +15,9 @@ services:
       - "80:80"
     volumes:
       - ./:/app
+    environment:
+      TINK_CLIENT_ID: "YOUR_TINK_CLIENT_ID"
+      TINK_CLIENT_SECRET: "YOUR_TINK_CLIENT_SECRET"
     command: [
         "poetry",
         "run",
