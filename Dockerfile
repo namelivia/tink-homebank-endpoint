@@ -10,4 +10,4 @@ EXPOSE 4444
 
 FROM builder AS production
 RUN poetry install --without dev
-CMD ["poetry", "run", "python", "main.py"]
+CMD ["pipenv", "run", "gunicorn", "-c", "gunicorn.conf.py", "app.main:app"]
