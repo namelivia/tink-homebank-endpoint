@@ -19,10 +19,19 @@ def read_root(
         ..., title="Credentials ID", description="The credentials ID"
     ),
 ):
-    logger.info(f"Authorization Code: {code}")
-    logger.info(f"Credentials ID: {credentials_id}")
+    # Store the authorization code
     storage = TokenStorage()
-    storage.store_new_refresh_token_refresh_token(code)
-    logger.info(f"Tink Client Id: {os.environ.get('TINK_CLIENT_ID')}")
-    logger.info(f"Tink Client Secret: {os.environ.get('TINK_CLIENT_SECRET')}")
+    storage.store_new_authorization_code(code)
+
+    try:
+        tink = Tink(
+            client_id=os.environ.get("TINK_CLIENT_ID"),
+            client_secret=os.environ.get("TINK_CLIENT_SECRET"),
+            redirect_uri=os.environ.get("TINK_CALLBACK_URI"),
+            token_storage=storage,
+        )
+    except NoAuthorizationCodeException:
+        logger.error("No authorization code found")
+        return {"Status": "ERROR"}
+
     return {"Status": "OK"}

@@ -14,3 +14,6 @@ class TokenStorage(Storage):
 
     def retrieve_authorization_code(self) -> str:
         return self.authorization_code
+
+    def store_new_authorization_code(self, new_authorization_code: str) -> str:
+        self.authorization_code = new_authorization_code
