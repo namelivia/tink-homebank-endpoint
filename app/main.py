@@ -1,6 +1,7 @@
 import os
 from app.storage.storage import TokenStorage
 from tink_http_python.tink import Tink
+from tink_http_python.exceptions import NoAuthorizationCodeException
 
 from fastapi import FastAPI, Query
 from logging import Logger
@@ -28,7 +29,7 @@ def read_root(
             client_id=os.environ.get("TINK_CLIENT_ID"),
             client_secret=os.environ.get("TINK_CLIENT_SECRET"),
             redirect_uri=os.environ.get("TINK_CALLBACK_URI"),
-            token_storage=storage,
+            storage=storage,
         )
     except NoAuthorizationCodeException:
         logger.error("No authorization code found")
