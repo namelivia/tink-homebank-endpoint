@@ -5,9 +5,12 @@ from tink_http_python.exceptions import NoAuthorizationCodeException
 from tink_http_python.transactions import Transactions
 
 from fastapi import FastAPI, Query
-from logging import Logger
+from fastapi.logger import logger
+import logging
 
-logger = Logger(__name__)
+gunicorn_logger = logging.getLogger("gunicorn.error")
+logger.handlers = gunicorn_logger.handlers
+logger.setLevel(gunicorn_logger.level)
 
 app = FastAPI()
 
