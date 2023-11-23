@@ -6,11 +6,18 @@ from tink_http_python.transactions import Transactions
 
 from fastapi import FastAPI, Query
 from fastapi.logger import logger
+import requests
 import logging
 
+# Show logs in gunicorn
 gunicorn_logger = logging.getLogger("gunicorn.error")
 logger.handlers = gunicorn_logger.handlers
-logger.setLevel(gunicorn_logger.level)
+
+# Enable debug logging for urllib3
+requests_logger = logging.getLogger("requests.packages.urllib3")
+requests_logger.setLevel(logging.DEBUG)
+requests_logger.propagate = True
+
 
 app = FastAPI()
 
@@ -35,7 +42,16 @@ def read_root(
             redirect_uri=os.environ.get("TINK_CALLBACK_URI"),
             storage=storage,
         )
-        transactions = tink.transactions().get()
+        try:
+            transactions = tink.transactions().get()
+        except requests.exceptions.HTTPError as e:
+            logger.error("Error when making the request")
+            logger.error("Request details:")
+            logger.error(e.request.__dict__)
+            logger.error("Response details:")
+            logger.error(e.response.__dict__)
+            exit(1)
+
     except NoAuthorizationCodeException:
         logger.error("No authorization code found")
         return {"Status": "ERROR"}
