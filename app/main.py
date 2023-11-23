@@ -42,19 +42,13 @@ def read_root(
             redirect_uri=os.environ.get("TINK_CALLBACK_URI"),
             storage=storage,
         )
-        try:
-            transactions = tink.transactions().get()
-        except requests.exceptions.HTTPError as e:
-            logger.error("Error when making the request")
-            logger.error("Request details:")
-            logger.error(e.request.__dict__)
-            logger.error("Response details:")
-            logger.error(e.response.__dict__)
-            exit(1)
+        transactions = tink.transactions().get()
 
     except NoAuthorizationCodeException:
         logger.error("No authorization code found")
         return {"Status": "ERROR"}
 
-    transaction = transactions[0]
-    return {"Status": "OK", "Transaction": transaction.descriptions.original}
+    result = ""
+    for transaction in transactions.transactions:
+        result += transaction.descriptions.original
+    return {"Status": "OK", "Transaction": result}
