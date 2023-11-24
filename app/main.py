@@ -7,8 +7,8 @@ from tink_http_python.exceptions import NoAuthorizationCodeException
 from tink_http_python.transactions import Transactions
 
 from fastapi import FastAPI, Query
+from fastapi.responses import FileResponse
 from fastapi.logger import logger
-from app.notifications.notifications import Notifications
 import requests
 import logging
 
@@ -72,7 +72,6 @@ def read_root(
                     None,
                 )
             )
-    return {"Status": "OK"}
-    Notifications.send_file(
-        os.environ.get("NOTIFICATIONS_SERVICE_ENDPOINT"), "## Result", file_name
+    return FileResponse(
+        file_name, filename="output.csv", media_type="application/octet-stream"
     )
