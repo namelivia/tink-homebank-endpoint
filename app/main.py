@@ -74,5 +74,5 @@ def read_root(
             )
     return {"Status": "OK"}
     Notifications.send_file(
-        os.environ.get("NOTIFICATION_SERVICE_ENDPOINT"), "## Result", file_name
+        os.environ.get("NOTIFICATIONS_SERVICE_ENDPOINT"), "## Result", file_name
     )
