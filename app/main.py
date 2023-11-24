@@ -1,4 +1,6 @@
 import os
+import csv
+import time
 from app.storage.storage import TokenStorage
 from tink_http_python.tink import Tink
 from tink_http_python.exceptions import NoAuthorizationCodeException
@@ -48,7 +50,25 @@ def read_root(
         logger.error("No authorization code found")
         return {"Status": "ERROR"}
 
-    result = ""
-    for transaction in transactions.transactions:
-        result += transaction.descriptions.original
-    return {"Status": "OK", "Transaction": result}
+    # Generate CSV
+    current_timestamp = int(time.time())
+    csv_path = os.environ.get("CSV_PATH")
+    with open(f"{csv_path}/output_{current_timestamp}.csv", "w") as f:
+        writer = csv.writer(f, delimiter=";")
+        for transaction in transactions.transactions:
+            category = "pending"
+            memo = "pending"
+            writer.writerow(
+                (
+                    transaction.dates.booked,
+                    0,
+                    transaction.descriptions.original,
+                    None,
+                    memo,
+                    Transactions.calculate_real_amount(transaction.amount.value),
+                    category,
+                    None,
+                )
+            )
+    return {"Status": "OK"}
+    # TODO: Send the file
