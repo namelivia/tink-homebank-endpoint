@@ -8,6 +8,7 @@ from tink_http_python.transactions import Transactions
 
 from fastapi import FastAPI, Query
 from fastapi.logger import logger
+from app.notifications.notifications import Notifications
 import requests
 import logging
 
@@ -53,7 +54,8 @@ def read_root(
     # Generate CSV
     current_timestamp = int(time.time())
     csv_path = os.environ.get("CSV_PATH")
-    with open(f"{csv_path}/output_{current_timestamp}.csv", "w") as f:
+    file_name = f"{csv_path}/output_{current_timestamp}.csv"
+    with open(file_name, "w") as f:
         writer = csv.writer(f, delimiter=";")
         for transaction in transactions.transactions:
             category = "pending"
@@ -71,4 +73,6 @@ def read_root(
                 )
             )
     return {"Status": "OK"}
-    # TODO: Send the file
+    Notifications.send_file(
+        os.environ.get("NOTIFICATION_SERVICE_ENDPOINT"), "## Result", file_name
+    )
