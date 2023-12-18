@@ -27,12 +27,12 @@ jobs:
           builder: ${{ steps.development_builder.outputs.name }}
           target: development
           load: true
-          tags: tink-homebank-endpoint-testing:latest
+          tags: tink-firefly-endpoint-testing:latest
       - 
         name: Run tests
         uses: addnab/docker-run-action@v1
         with:
-          image: tink-homebank-endpoint-testing:latest
+          image: tink-firefly-endpoint-testing:latest
           shell: sh 
           run: sh /app/run_tests_ci ${{ github.sha }} ${{ secrets.CODECOV_TOKEN }}
   deploy:
@@ -58,4 +58,4 @@ jobs:
           push: true
           builder: ${{ steps.production_builder.outputs.name }}
           target: production
-          tags: namelivia/tink-homebank-endpoint:latest
+          tags: namelivia/tink-firefly-endpoint:latest
