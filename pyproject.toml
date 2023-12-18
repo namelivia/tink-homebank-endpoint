@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "tink-homebank-endpoint"
+name = "tink-firefly-endpoint"
 version = "0.0.1"
-description = "Pull transactions from Tink and export them in a CSV for Homebank"
+description = "Pull transactions from Tink and export them in a CSV for Firefly"
 authors = ["José Ignacio Amelivia Santiago <ohcan2@gmail.com>"]
 readme = "README.md"
 

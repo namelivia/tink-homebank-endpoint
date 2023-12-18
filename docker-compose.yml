@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: development
-    container_name: tink-homebank-endpoint
+    container_name: tink-firefly-endpoint
     restart: unless-stopped
     tty: true
     working_dir: /app
