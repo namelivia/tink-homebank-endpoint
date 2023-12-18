@@ -8,7 +8,7 @@ from tink_http_python.exceptions import (
 class TokenStorage(Storage):
     def __init__(self):
         self.refresh_token = None
-        self.atuhorization_code = None
+        self.authorization_code = None
 
     def store_new_refresh_token_refresh_token(self, new_refresh_token) -> None:
         self.refresh_token = new_refresh_token
