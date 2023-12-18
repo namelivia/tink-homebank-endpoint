@@ -62,13 +62,10 @@ def read_root(
             writer.writerow(
                 (
                     transaction.dates.booked,
-                    0,
                     transaction.descriptions.original,
-                    None,
                     memo,
                     Transactions.calculate_real_amount(transaction.amount.value),
                     category,
-                    None,
                 )
             )
     return {"Status": "OK"}
