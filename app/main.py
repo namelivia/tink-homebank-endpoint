@@ -7,7 +7,6 @@ from tink_http_python.exceptions import NoAuthorizationCodeException
 from tink_http_python.transactions import Transactions
 
 from fastapi import FastAPI, Query
-from fastapi.responses import FileResponse
 from fastapi.logger import logger
 import requests
 import logging
@@ -72,6 +71,4 @@ def read_root(
                     None,
                 )
             )
-    return FileResponse(
-        file_name, filename="output.csv", media_type="application/octet-stream"
-    )
+    return {"Status": "OK"}
