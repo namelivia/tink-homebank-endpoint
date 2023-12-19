@@ -10,6 +10,7 @@ from fastapi import FastAPI, Query
 from fastapi.logger import logger
 import requests
 import logging
+from shutil import copyfile
 
 # Show logs in gunicorn
 gunicorn_logger = logging.getLogger("gunicorn.error")
@@ -68,4 +69,7 @@ def read_root(
                     category,
                 )
             )
+    configuration_file_name = f"{csv_path}/output_{current_timestamp}.json"
+    confiuration_template_file_name = "templates/importer_configuration.json"
+    copyfile(confiuration_template_file_name, configuration_file_name)
     return {"Status": "OK"}
