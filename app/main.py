@@ -51,25 +51,38 @@ def read_root(
         logger.error("No authorization code found")
         return {"Status": "ERROR"}
 
+    # Hardcoded target date for now in Y-m-d format
+    target_date = "2023-09-01"
+    below_target_date = False
+    page_token = None
     # Generate CSV
     current_timestamp = int(time.time())
     csv_path = os.environ.get("CSV_PATH")
     file_name = f"{csv_path}/output_{current_timestamp}.csv"
     with open(file_name, "w") as f:
         writer = csv.writer(f, delimiter=";")
-        for transaction in transactions.transactions:
-            category = "pending"
-            memo = "pending"
-            writer.writerow(
-                (
-                    transaction.dates.booked,
-                    transaction.descriptions.original,
-                    memo,
-                    Transactions.calculate_real_amount(transaction.amount.value),
-                    category,
+        while not below_target_date:
+            for transaction in transactions.transactions:
+                transaction_date = transaction.dates.booked
+                below_target_date = transaction_date < target_date
+                category = "pending"
+                memo = "pending"
+                writer.writerow(
+                    (
+                        transaction_date,
+                        transaction.descriptions.original,
+                        memo,
+                        Transactions.calculate_real_amount(transaction.amount.value),
+                        category,
+                    )
                 )
-            )
+            if below_target_date:
+                logger.info("Transaction dates below target date, stopping")
+            else:
+                logger.info("Transaction dates above target date, continuing")
+                next_page_token = transactions.next_page_token
+                transactions = tink.transactions().get(pageToken=next_page_token)
     configuration_file_name = f"{csv_path}/output_{current_timestamp}.json"
-    confiuration_template_file_name = "templates/importer_configuration.json"
-    copyfile(confiuration_template_file_name, configuration_file_name)
+    configuration_template_file_name = "templates/importer_configuration.json"
+    copyfile(configuration_template_file_name, configuration_file_name)
     return {"Status": "OK"}
