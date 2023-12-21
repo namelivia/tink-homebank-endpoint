@@ -52,7 +52,7 @@ def read_root(
         return {"Status": "ERROR"}
 
     # Hardcoded target date for now in Y-m-d format
-    target_date = "2023-09-01"
+    target_date = "2022-10-01"
     below_target_date = False
     page_token = None
     # Generate CSV
