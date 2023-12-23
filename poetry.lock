@@ -891,30 +891,30 @@ full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyam
 
 [[package]]
 name = "tink-http-python"
-version = "1.2.1"
+version = "1.2.3"
 description = "Python SDK for accessing the tink API"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "tink_http_python-1.2.1-py3-none-any.whl", hash = "sha256:55ec9cf4353af4308f21a0a97d3525ffa7d6f109f99e6e4b6170f2a14cdbfab7"},
-    {file = "tink_http_python-1.2.1.tar.gz", hash = "sha256:52982a56421d24fa531759490e1a79829721bcf8d659099fc2a8ca9d34673c7b"},
+    {file = "tink_http_python-1.2.3-py3-none-any.whl", hash = "sha256:32669e27a3e319a274c77b2f4dd2241d70c8779622468c4bede3fe57206a2e1b"},
+    {file = "tink_http_python-1.2.3.tar.gz", hash = "sha256:d9c51b5df7f65889d171f7f36b813a4f95bc276361198c378b39e0ff0d6be492"},
 ]
 
 [package.dependencies]
 dataclass-map-and-log = "0.1.2"
 pyhumps = ">=3.8.0,<4.0.0"
 requests = ">=2.31.0,<3.0.0"
-tink-python-api-types = "0.0.3"
+tink-python-api-types = "0.0.4"
 
 [[package]]
 name = "tink-python-api-types"
-version = "0.0.3"
+version = "0.0.4"
 description = "Python types for the tink API entities"
 optional = false
 python-versions = ">=3.6, <4"
 files = [
-    {file = "tink-python-api-types-0.0.3.tar.gz", hash = "sha256:c6dd2b022fc1b6b0679b5c69ed1b01441d7a2f6dfdb126255843d4ba6e804154"},
-    {file = "tink_python_api_types-0.0.3-py3-none-any.whl", hash = "sha256:63c1d8acb52d7ad6ef0f28c29cbb37dab18d8b54f26176ff78ea7368f50054d0"},
+    {file = "tink-python-api-types-0.0.4.tar.gz", hash = "sha256:0c559332ba964c253ebfaf25a27476765923241b7a61adda2d9fa65c87fbc4ae"},
+    {file = "tink_python_api_types-0.0.4-py3-none-any.whl", hash = "sha256:c4fd0a29b152c4b09eb50d4ec34c31942b736692bb3ca73946d93f16ab4da673"},
 ]
 
 [package.dependencies]
@@ -1069,4 +1069,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8fdfe287a3133393aff0c033fad7d05b7c213a82f9c6935a53a6c026cfe57620"
+content-hash = "d7b8f0de0ce78d404da1c8582a08c05ca98ced6e5f7d3f8fe8dc4ab1d676c2ac"

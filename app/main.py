@@ -80,7 +80,7 @@ def read_root(
                             (
                                 transaction_date,
                                 transaction.descriptions.original,
-                                transaction.provider_transaction_id,
+                                transaction.identifiers.provider_transaction_id,
                                 Transactions.calculate_real_amount(
                                     transaction.amount.value
                                 ),
