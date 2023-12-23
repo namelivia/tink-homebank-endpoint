@@ -63,6 +63,9 @@ def read_root(
     current_timestamp = int(time.time())
     csv_path = os.environ.get("CSV_PATH")
     file_name = f"{csv_path}/output_{current_timestamp}.csv"
+    # For debuggin purposes, log all fields from the first transaction
+    logger.info("First transaction:")
+    logger.info(transactions.transactions[0].__dict__)
     with open(file_name, "w") as f:
         writer = csv.writer(f, delimiter=";")
         while not below_target_date:
@@ -73,17 +76,15 @@ def read_root(
                     if below_target_date:
                         logger.info("Transaction dates below target date, stopping")
                     else:
-                        category = "pending"
-                        memo = "pending"
                         writer.writerow(
                             (
                                 transaction_date,
                                 transaction.descriptions.original,
-                                memo,
+                                transaction.provider_transaction_id,
                                 Transactions.calculate_real_amount(
                                     transaction.amount.value
                                 ),
-                                category,
+                                transaction.id,
                             )
                         )
             if not below_target_date:
