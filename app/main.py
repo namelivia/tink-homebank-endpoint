@@ -1,13 +1,15 @@
 import os
 import csv
 import time
+from datetime import datetime
 from app.storage.storage import TokenStorage
 from tink_http_python.tink import Tink
 from tink_http_python.exceptions import NoAuthorizationCodeException
 from tink_http_python.transactions import Transactions
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Cookie, HTTPException
 from fastapi.logger import logger
+from fastapi.responses import RedirectResponse
 import requests
 import logging
 from shutil import copyfile
@@ -33,6 +35,7 @@ def read_root(
     credentials_id: str = Query(
         ..., title="Credentials ID", description="The credentials ID"
     ),
+    date_until: str = Cookie(default=None),
 ):
     # Store the authorization code
     storage = TokenStorage()
@@ -49,10 +52,11 @@ def read_root(
 
     except NoAuthorizationCodeException:
         logger.error("No authorization code found")
-        return {"Status": "ERROR"}
+        raise HTTPException(status_code=400, detail="No authorization code found")
 
-    # Hardcoded target date for now in Y-m-d format
-    target_date = "2022-10-01"
+    if date_until is None:
+        raise HTTPException(status_code=400, detail="date_until cookie not found")
+
     below_target_date = False
     page_token = None
     # Generate CSV
@@ -64,7 +68,7 @@ def read_root(
         while not below_target_date:
             for transaction in transactions.transactions:
                 transaction_date = transaction.dates.booked
-                below_target_date = transaction_date < target_date
+                below_target_date = transaction_date < date_until
                 category = "pending"
                 memo = "pending"
                 writer.writerow(
@@ -86,3 +90,36 @@ def read_root(
     configuration_template_file_name = "templates/importer_configuration.json"
     copyfile(configuration_template_file_name, configuration_file_name)
     return {"Status": "OK"}
+
+
+@app.get("/test_cookie")
+def retrieve_cookie_value(date_until: str = Cookie(default=None)):
+    if date_until is None:
+        raise HTTPException(status_code=400, detail="date_until cookie not found")
+
+    return {"date_until": date_until}
+
+
+@app.get("/update")
+def update_account(
+    date_until: str = Query(
+        ..., title="Date Until", description="Get data until this date"
+    )
+):
+    try:
+        datetime.strptime(date_until, "%Y-%m-%d")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Date format is not valid")
+    try:
+        tink = Tink(
+            client_id=os.environ.get("TINK_CLIENT_ID"),
+            client_secret=os.environ.get("TINK_CLIENT_SECRET"),
+            redirect_uri=os.environ.get("TINK_CALLBACK_URI"),
+            storage=TokenStorage(),
+        )
+        transactions = tink.transactions().get()
+    except NoAuthorizationCodeException:
+        link = tink.get_authorization_code_link()
+    response = RedirectResponse(url=tink.get_authorization_code_link())
+    response.set_cookie(key="date_until", value=date_until)
+    return response
