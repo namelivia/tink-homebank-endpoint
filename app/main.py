@@ -67,22 +67,25 @@ def read_root(
         writer = csv.writer(f, delimiter=";")
         while not below_target_date:
             for transaction in transactions.transactions:
-                transaction_date = transaction.dates.booked
-                below_target_date = transaction_date < date_until
-                category = "pending"
-                memo = "pending"
-                writer.writerow(
-                    (
-                        transaction_date,
-                        transaction.descriptions.original,
-                        memo,
-                        Transactions.calculate_real_amount(transaction.amount.value),
-                        category,
+                if not below_target_date:
+                    transaction_date = transaction.dates.booked
+                    below_target_date = transaction_date < date_until
+                    if below_target_date:
+                        logger.info("Transaction dates below target date, stopping")
+                    category = "pending"
+                    memo = "pending"
+                    writer.writerow(
+                        (
+                            transaction_date,
+                            transaction.descriptions.original,
+                            memo,
+                            Transactions.calculate_real_amount(
+                                transaction.amount.value
+                            ),
+                            category,
+                        )
                     )
-                )
-            if below_target_date:
-                logger.info("Transaction dates below target date, stopping")
-            else:
+            if not below_target_date:
                 logger.info("Transaction dates above target date, continuing")
                 next_page_token = transactions.next_page_token
                 transactions = tink.transactions().get(pageToken=next_page_token)
