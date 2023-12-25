@@ -36,6 +36,7 @@ def read_root(
         ..., title="Credentials ID", description="The credentials ID"
     ),
     date_until: str = Cookie(default=None),
+    account_id: str = Cookie(default=None),
 ):
     # Store the authorization code
     storage = TokenStorage()
@@ -56,6 +57,9 @@ def read_root(
 
     if date_until is None:
         raise HTTPException(status_code=400, detail="date_until cookie not found")
+
+    if account_id is None:
+        raise HTTPException(status_code=400, detail="account_id cookie not found")
 
     below_target_date = False
     page_token = None
@@ -78,6 +82,7 @@ def read_root(
                     else:
                         writer.writerow(
                             (
+                                account_id,
                                 transaction_date,
                                 transaction.descriptions.original,
                                 transaction.identifiers.provider_transaction_id,
@@ -97,19 +102,14 @@ def read_root(
     return {"Status": "OK"}
 
 
-@app.get("/test_cookie")
-def retrieve_cookie_value(date_until: str = Cookie(default=None)):
-    if date_until is None:
-        raise HTTPException(status_code=400, detail="date_until cookie not found")
-
-    return {"date_until": date_until}
-
-
 @app.get("/update")
 def update_account(
     date_until: str = Query(
         ..., title="Date Until", description="Get data until this date"
-    )
+    ),
+    account_id: str = Query(
+        ..., title="Account id", description="Id for the account to update"
+    ),
 ):
     try:
         datetime.strptime(date_until, "%Y-%m-%d")
@@ -127,4 +127,5 @@ def update_account(
         link = tink.get_authorization_code_link()
     response = RedirectResponse(url=tink.get_authorization_code_link())
     response.set_cookie(key="date_until", value=date_until)
+    response.set_cookie(key="account_id", value=account_id)
     return response
