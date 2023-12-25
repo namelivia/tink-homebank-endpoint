@@ -2,6 +2,7 @@
   "date": "Y-m-d",
   "delimiter": "semicolon",
   "headers": false,
+  "default_account": 34,
   "rules": true,
   "skip_form": false,
   "add_import_tag": true,
