@@ -70,6 +70,7 @@ def read_root(
     # For debuggin purposes, log all fields from the first transaction
     logger.info("First transaction:")
     logger.info(transactions.transactions[0].__dict__)
+    summary = []
     with open(file_name, "w") as f:
         writer = csv.writer(f, delimiter=";")
         while not below_target_date:
@@ -92,6 +93,15 @@ def read_root(
                                 transaction.id,
                             )
                         )
+                        summary.append(
+                            {
+                                "date": transaction_date,
+                                "description": transaction.descriptions.original,
+                                "amount": Transactions.calculate_real_amount(
+                                    transaction.amount.value
+                                ),
+                            }
+                        )
             if not below_target_date:
                 logger.info("Transaction dates above target date, continuing")
                 next_page_token = transactions.next_page_token
@@ -108,7 +118,7 @@ def read_root(
     )
     with open(configuration_file_name, "w") as configuration_file:
         configuration_file.write(rendered_configuration)
-    return {"Status": "OK"}
+    return {"Status": "OK", "Summary": summary}
 
 
 @app.get("/update")
