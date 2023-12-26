@@ -14,7 +14,7 @@ def main():
         "Content-Type": "application/json",
     }
     firefly_url = os.getenv("FIREFLY_URL")
-    r = requests.get(f"http://{firefly_url}/api/v1/webhooks", headers=headers)
+    r = requests.get(f"{firefly_url}/api/v1/accounts", headers=headers)
     accounts = r.json()["data"]
     app_url = os.getenv("APP_URL")
     for account in accounts:
