@@ -1,24 +1,25 @@
 import os
-from tink_http_python.tink import Tink
-from tink_http_python.exceptions import NoAuthorizationCodeException
-from app.storage.storage import TokenStorage
 from dotenv import load_dotenv
 from app.notifications.notifications import Notifications
+import requests
 
 load_dotenv()
 
 
 def main():
-    try:
-        tink = Tink(
-            client_id=os.environ.get("TINK_CLIENT_ID"),
-            client_secret=os.environ.get("TINK_CLIENT_SECRET"),
-            redirect_uri=os.environ.get("TINK_CALLBACK_URI"),
-            storage=TokenStorage(),
-        )
-        transactions = tink.transactions().get()
-    except NoAuthorizationCodeException:
-        link = tink.get_authorization_code_link()
+    # Will send a notification to update each account
+    headers = {
+        "accept": "application/vnd.api+json",
+        "Authorization": "Bearer " + os.getenv("FIREFLY_PERSONAL_ACCESS_TOKEN"),
+        "Content-Type": "application/json",
+    }
+    firefly_url = os.getenv("FIREFLY_URL")
+    r = requests.get(f"http://{firefly_url}/api/v1/webhooks", headers=headers)
+    accounts = r.json()["data"]
+    app_url = os.getenv("APP_URL")
+    for account in accounts:
+        date_until = account["attributes"]["current_balance_date"].split("T")[0]
+        link = f"{app_url}/update?date_until={date_until}&account_id={account['id']}"
         Notifications.send(link)
 
 
