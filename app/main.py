@@ -12,7 +12,7 @@ from fastapi.logger import logger
 from fastapi.responses import RedirectResponse
 import requests
 import logging
-from shutil import copyfile
+from jinja2 import Template
 
 # Show logs in gunicorn
 gunicorn_logger = logging.getLogger("gunicorn.error")
@@ -98,7 +98,16 @@ def read_root(
                 transactions = tink.transactions().get(pageToken=next_page_token)
     configuration_file_name = f"{csv_path}/output_{current_timestamp}.json"
     configuration_template_file_name = "templates/importer_configuration.json"
-    copyfile(configuration_template_file_name, configuration_file_name)
+    with open(configuration_template_file_name, "r") as template_file:
+        template_content = template_file.read()
+    template = Template(template_content)
+    rendered_configuration = template.render(
+        {
+            "default_account_id": account_id,
+        }
+    )
+    with open(configuration_file_name, "w") as configuration_file:
+        configuration_file.write(rendered_configuration)
     return {"Status": "OK"}
 
 

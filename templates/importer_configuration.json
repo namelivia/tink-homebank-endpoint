@@ -2,7 +2,7 @@
   "date": "Y-m-d",
   "delimiter": "semicolon",
   "headers": false,
-  "default_account": 34,
+  "default_account": {{ default_account_id }},
   "rules": true,
   "skip_form": false,
   "add_import_tag": true,
