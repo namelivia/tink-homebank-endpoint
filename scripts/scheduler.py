@@ -20,7 +20,9 @@ def main():
     for account in accounts:
         date_until = account["attributes"]["current_balance_date"].split("T")[0]
         link = f"{app_url}/update?date_until={date_until}&account_id={account['id']}"
-        Notifications.send(link)
+        Notifications.send(
+            f"{account['attributes']['active']}{account['attributes']['name']}: {link}"
+        )
 
 
 if __name__ == "__main__":
