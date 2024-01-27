@@ -11,7 +11,7 @@ python-dotenv = "^1.0.0"
 fastapi = "^0.109.0"
 tink-http-python = "1.2.3"
 gunicorn = "^21.2.0"
-uvicorn = "^0.26.0"
+uvicorn = "^0.27.0"
 httpx = "^0.26.0"
 jinja2 = "^3.1.3"
 
