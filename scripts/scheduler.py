@@ -14,14 +14,24 @@ def main():
         "Content-Type": "application/json",
     }
     firefly_url = os.getenv("FIREFLY_URL")
-    r = requests.get(f"{firefly_url}/api/v1/accounts", headers=headers)
-    accounts = r.json()["data"]
+    account_request = requests.get(f"{firefly_url}/api/v1/accounts", headers=headers)
+    accounts = account_request.json()["data"]
     accounts = list(
         filter(lambda account: account["attributes"]["type"] == "asset", accounts)
     )
     app_url = os.getenv("APP_URL")
     for account in accounts:
-        date_until = account["attributes"]["current_balance_date"].split("T")[0]
+        account_id = account["id"]
+        transactions_request = requests.get(
+            f"{firefly_url}/api/v1/accounts/{account_id}/transactions?limit=1",
+            headers=headers,
+        )
+        transactions = r.json()["data"]
+        if len(transactions) == 0:
+            raise Exception("No transactions for account {account_id}")
+        last_transaction_date = transactions[0]["attributes"]["created_at"].split("T")[
+            0
+        ]
         link = f"{app_url}/update?date_until={date_until}&account_id={account['id']}"
         Notifications.send(f"{account['attributes']['name']}: {link}")
 
