@@ -26,7 +26,7 @@ def main():
             f"{firefly_url}/api/v1/accounts/{account_id}/transactions?limit=1",
             headers=headers,
         )
-        transactions = r.json()["data"]
+        transactions = transactions_request.json()["data"]
         if len(transactions) == 0:
             raise Exception("No transactions for account {account_id}")
         last_transaction_date = transactions[0]["attributes"]["created_at"].split("T")[
