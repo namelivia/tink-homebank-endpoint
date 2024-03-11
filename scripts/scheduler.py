@@ -32,7 +32,7 @@ def main():
         last_transaction_date = transactions[0]["attributes"]["created_at"].split("T")[
             0
         ]
-        link = f"{app_url}/update?date_until={date_until}&account_id={account['id']}"
+        link = f"{app_url}/update?date_until={last_transaction_date}&account_id={account['id']}"
         Notifications.send(f"{account['attributes']['name']}: {link}")
 
 
