@@ -27,13 +27,12 @@ def main():
             headers=headers,
         )
         transactions = transactions_request.json()["data"]
-        if len(transactions) == 0:
-            raise Exception("No transactions for account {account_id}")
-        last_transaction_date = transactions[0]["attributes"]["created_at"].split("T")[
-            0
-        ]
-        link = f"{app_url}/update?date_until={last_transaction_date}&account_id={account['id']}"
-        Notifications.send(f"{account['attributes']['name']}: {link}")
+        if len(transactions) > 0:  # Ignore accounts with no transactions
+            last_transaction_date = transactions[0]["attributes"]["created_at"].split(
+                "T"
+            )[0]
+            link = f"{app_url}/update?date_until={last_transaction_date}&account_id={account['id']}"
+            Notifications.send(f"{account['attributes']['name']}: {link}")
 
 
 if __name__ == "__main__":
