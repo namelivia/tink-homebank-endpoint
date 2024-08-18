@@ -56,7 +56,7 @@ def read_root(
         raise HTTPException(status_code=400, detail="No authorization code found")
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTPError: {e}")
-        logger.errof(f"Response: {e.response.json()}")
+        logger.error(f"Response: {e.response.json()}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
     if date_until is None:
