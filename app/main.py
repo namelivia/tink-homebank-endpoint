@@ -14,6 +14,8 @@ import requests
 import logging
 from jinja2 import Template
 
+logger.setLevel(logging.DEBUG)
+
 # Show logs in gunicorn
 gunicorn_logger = logging.getLogger("gunicorn.error")
 logger.handlers = gunicorn_logger.handlers
@@ -57,6 +59,7 @@ def read_root(
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTPError: {e}")
         logger.error(f"Response: {e.response.json()}")
+        logger.error(f"Request data: {e.request.body}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
     if date_until is None:
