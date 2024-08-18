@@ -54,6 +54,10 @@ def read_root(
     except NoAuthorizationCodeException:
         logger.error("No authorization code found")
         raise HTTPException(status_code=400, detail="No authorization code found")
+    except requests.exceptions.HTTPError as e:
+        logger.error(f"HTTPError: {e}")
+        logger.errof(f"Response: {e.response.json()}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
     if date_until is None:
         raise HTTPException(status_code=400, detail="date_until cookie not found")
