@@ -1,5 +1,6 @@
 import os
 import csv
+import sys
 import time
 from datetime import datetime
 from app.storage.storage import TokenStorage
@@ -8,25 +9,23 @@ from tink_http_python.exceptions import NoAuthorizationCodeException
 from tink_http_python.transactions import Transactions
 
 from fastapi import FastAPI, Query, Cookie, HTTPException
-from fastapi.logger import logger
 from fastapi.responses import RedirectResponse
 import requests
 import logging
 from jinja2 import Template
 
-logger.setLevel(logging.DEBUG)
+app = FastAPI()
 
-# Show logs in gunicorn
-gunicorn_logger = logging.getLogger("gunicorn.error")
-logger.handlers = gunicorn_logger.handlers
+# Configure logging
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+from http.client import HTTPConnection
 
-# Enable debug logging for urllib3
+HTTPConnection.debuglevel = 1
 requests_logger = logging.getLogger("requests.packages.urllib3")
 requests_logger.setLevel(logging.DEBUG)
 requests_logger.propagate = True
 
-
-app = FastAPI()
+logger = logging.getLogger(__name__)
 
 
 @app.get("/")
