@@ -4,6 +4,8 @@ from tink_http_python.exceptions import (
     NoAuthorizationCodeException,
 )
 
+logger = logging.getLogger(__name__)
+
 
 class TokenStorage(Storage):
     def __init__(self):
@@ -11,11 +13,13 @@ class TokenStorage(Storage):
         self.authorization_code = None
 
     def store_new_refresh_token_refresh_token(self, new_refresh_token) -> None:
+        logger.info(f"Storing new refresh token: {new_refresh_token}")
         self.refresh_token = new_refresh_token
 
     def retrieve_refresh_token(self) -> str:
         if self.refresh_token is None:
             raise NoRefreshTokenException("Refresh token is not set")
+        logger.info(f"Retrieving refresh token: {self.refresh_token}")
         return self.refresh_token
 
     def retrieve_authorization_code(self) -> str:
