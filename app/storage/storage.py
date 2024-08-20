@@ -3,6 +3,7 @@ from tink_http_python.exceptions import (
     NoRefreshTokenException,
     NoAuthorizationCodeException,
 )
+import logging
 
 logger = logging.getLogger(__name__)
 
