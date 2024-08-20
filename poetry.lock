@@ -987,17 +987,21 @@ name = "tink-http-python"
 version = "1.2.4"
 description = "Python SDK for accessing the tink API"
 optional = false
-python-versions = "<4.0,>=3.8"
-files = [
-    {file = "tink_http_python-1.2.4-py3-none-any.whl", hash = "sha256:a4b53b326bd47508d0732b6f60894a096754ffad02caa99d407632bc29129758"},
-    {file = "tink_http_python-1.2.4.tar.gz", hash = "sha256:1db76ad956458df3f2c3b79205d1cb90dc7ca5c5c076bd56549449fce8a0efa9"},
-]
+python-versions = "^3.8"
+files = []
+develop = false
 
 [package.dependencies]
 dataclass-map-and-log = "0.1.2"
-pyhumps = ">=3.8.0,<4.0.0"
-requests = ">=2.31.0,<3.0.0"
+pyhumps = "^3.8.0"
+requests = "^2.31.0"
 tink-python-api-types = "0.0.4"
+
+[package.source]
+type = "git"
+url = "https://github.com/namelivia/tink-http-python.git"
+reference = "no_refresh_token"
+resolved_reference = "94e94ba58b4084eeb8517125101baa4f335eadaa"
 
 [[package]]
 name = "tink-python-api-types"
@@ -1146,4 +1150,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3cd7d162994ebb71f6dab7e59c8b38ce464f0439da319a73f99dc8cc0aadde08"
+content-hash = "7605d0e37ef10b5a00860f66d13838f0fd620c5fba4218282fb52307d8178aff"
