@@ -1001,7 +1001,7 @@ tink-python-api-types = "0.0.4"
 type = "git"
 url = "https://github.com/namelivia/tink-http-python.git"
 reference = "no_refresh_token"
-resolved_reference = "94e94ba58b4084eeb8517125101baa4f335eadaa"
+resolved_reference = "593e5af624e3ea796a99e3cb8d854891298d6480"
 
 [[package]]
 name = "tink-python-api-types"
