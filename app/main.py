@@ -87,12 +87,17 @@ def read_root(
                     if below_target_date:
                         logger.info("Transaction dates below target date, stopping")
                     else:
+                        provider_transaction_id = (
+                            transaction.identifiers.provider_transaction_id
+                            if transaction.identifiers is not None
+                            else ""
+                        )
                         writer.writerow(
                             (
                                 account_id,
                                 transaction_date,
                                 transaction.descriptions.original,
-                                transaction.identifiers.provider_transaction_id,
+                                provider_transaction_id,
                                 Transactions.calculate_real_amount(
                                     transaction.amount.value
                                 ),
