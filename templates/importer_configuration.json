@@ -11,9 +11,9 @@
     "account-id",
     "date_transaction",
     "description",
-    "_ignore",
+    "external-id",
     "amount",
-    "external-id"
+    "_ignore"
   ],
   "do_mapping": {
     "0": false,
