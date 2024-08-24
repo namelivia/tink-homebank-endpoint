@@ -13,7 +13,7 @@
     "description",
     "_ignore",
     "amount",
-    "_ignore"
+    "external-id"
   ],
   "do_mapping": {
     "0": false,
