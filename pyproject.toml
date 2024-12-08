@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "app"
-version = "1.0.0"
+version = "1.0.1"
 description = "Pull transactions from Tink and export them in a CSV for Firefly"
 authors = ["José Ignacio Amelivia Santiago <ohcan2@gmail.com>"]
 readme = "README.md"
