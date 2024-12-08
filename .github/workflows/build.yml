@@ -63,7 +63,6 @@ jobs:
             echo "TAG=${VERSION_TAG}" >> $GITHUB_ENV
           fi
       -
-      -
         name: Build and push production container
         id: docker_build
         uses: docker/build-push-action@v2
@@ -71,4 +70,4 @@ jobs:
           push: true
           builder: ${{ steps.production_builder.outputs.name }}
           target: production
-          tags: namelivia/garments-server:${{ env.TAG }}
+          tags: namelivia/tink-firefly-endpoint:${{ env.TAG }}
