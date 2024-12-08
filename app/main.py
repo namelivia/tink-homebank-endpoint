@@ -82,7 +82,7 @@ def read_root(
         while not below_target_date:
             for transaction in transactions.transactions:
                 if not below_target_date:
-                    transaction_date = transaction.dates.booked
+                    transaction_date = transaction.dates.value
                     below_target_date = transaction_date < date_until
                     if below_target_date:
                         logger.info("Transaction dates below target date, stopping")
