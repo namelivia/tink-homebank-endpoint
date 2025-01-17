@@ -96,7 +96,7 @@ def read_root(
                             (
                                 account_id,
                                 transaction_date,
-                                transaction.descriptions.original,
+                                transaction.descriptions.display,
                                 provider_transaction_id,
                                 Transactions.calculate_real_amount(
                                     transaction.amount.value
@@ -107,7 +107,7 @@ def read_root(
                         summary.append(
                             {
                                 "date": transaction_date,
-                                "description": transaction.descriptions.original,
+                                "description": transaction.descriptions.display,
                                 "amount": Transactions.calculate_real_amount(
                                     transaction.amount.value
                                 ),
